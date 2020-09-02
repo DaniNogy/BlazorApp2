@@ -1,0 +1,49 @@
+﻿@page "/"
+
+@if(People!=null)
+{<h3>People:</h3>
+ <select @onchange="ItemSelected" size="4" style="width:100%;">
+
+     @foreach (var person in People)
+     {
+         <option value="@person.Id.ToString()">@person.Name</option>
+     }
+ </select>
+        @if (SelectedPerson!=null)
+        {
+            <br />
+            <div>Selected Person:@SelectedPerson.Name</div>
+        }
+    
+ 
+}
+
+@code{
+    Person SelectedPerson;
+
+    void ItemSelected(ChangeEventArgs args)
+    {
+        SelectedPerson = (from p in People
+                          where p.Id == Convert.ToInt32(args.Value.ToString())
+                          select p).FirstOrDefault();
+    }
+
+    private List<Person> People;
+
+
+    public class Person
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+
+    protected override void OnInitialized()
+    {
+        People = new List<Person>();
+        People.Add(new Person { Id = 1, Name = "Dani" });
+        People.Add(new Person { Id = 2, Name = "Marius" });
+        People.Add(new Person { Id = 3, Name = "Alex" });
+        People.Add(new Person { Id = 4, Name = "Andrei" });
+    }
+
+}
